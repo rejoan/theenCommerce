@@ -7,9 +7,7 @@ Laravel system powers a multi‑vendor commerce platform
 
 ## Getting Started
 
-**To get started, follow the instructions below**
-
-To get a local copy up and running follow these simple steps.
+To get up and running follow these simple steps.
 
 - git clone the repo
 
@@ -56,7 +54,7 @@ password:123456
 Now using above returned token you may use in endpoints as bearer token
 
 ### How to place an order
-Use following format data and send through postman to `base_url/api/orders`
+Use following format data and send through postman to `base_url/api/orders` [dont forget to use bearer token in header for auth]
 ```
 {
 "buyer_id": 2,
