@@ -36,7 +36,7 @@ php artisan serve
 
 Then send POST request to
 ```
-http://127.0.0.1:8000/api/auth/login
+base_url/api/auth/login
 params
 email:buyer_rejoan@example.com
 password:123456
@@ -55,6 +55,31 @@ password:123456
 ```
 Now using above returned token you may use in endpoints as bearer token
 
+### How to place an order
+Use following format data and send through postman to `base_url/api/orders`
+```
+{
+"buyer_id": 2,
+"items": [
+    {"product_id": 1, "quantity": 2},
+    {"product_id": 2, "quantity": 1}
+  ]
+}
+```
+### Response data
+
+```
+{
+  "message": "Order placed successfully.",
+  "order_id": 5,
+  "order_number": "ORD-1760645398-2X8D52"
+}
+```
+
+Queue worker needs to be started as 
+```
+php artisan queue:work
+```
 
 ## Authors
 
