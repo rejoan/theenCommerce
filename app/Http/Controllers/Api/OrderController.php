@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Developer: Rejoanul Alam | Reviewed: 2025‑10‑16
+ */
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;

@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Developer: Rejoanul Alam | Reviewed: 2025‑10‑16
+ */
 namespace App\Services;
 
 use App\Events\OrderPlaced;

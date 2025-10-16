@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Developer: Rejoanul Alam | Reviewed: 2025‑10‑16
+ */
 namespace App\Listeners;
 
 use App\Events\OrderPlaced;
