@@ -3,19 +3,18 @@ This document outlines the architecture for the multi-vendor e-commerce order fu
 ### Core Architecture & Data Flow
 The system is designed around a decoupled, event-driven flow that begins the moment a customer places an order.
 
-*Atomic Order Creation*: When a customer submits an order, the primary PlaceOrder action is wrapped within a database transaction using DB::transaction(). This guarantees atomicity. The parent Order and its associated OrderItems (potentially from multiple vendors) are either all saved successfully, or the entire operation is rolled back upon any failure. This prevents partial orders and ensures data integrity.
+**Atomic Order Creation**: When a customer submits an order, the primary PlaceOrder action is wrapped within a database transaction using DB::transaction(). This guarantees atomicity. The parent Order and its associated OrderItems (potentially from multiple vendors) are either all saved successfully, or the entire operation is rolled back upon any failure. This prevents partial orders and ensures data integrity.
 
-*Synchronous Events & Observers*: Immediately upon the successful commit of the database transaction, the application dispatches a primary domain event, such as OrderPlaced. Laravel Observers attached to the Order and OrderItem models handle tightly coupled, synchronous logic that must occur immediately, such as generating unique order codes or setting initial statuses.
+**Synchronous Events & Observers**: Immediately upon the successful commit of the database transaction, the application dispatches a primary domain event, such as OrderPlaced. Laravel Observers attached to the Order and OrderItem models handle tightly coupled, synchronous logic that must occur immediately, such as generating unique order codes or setting initial statuses.
 
-*Decoupled Asynchronous Processing*: The OrderPlaced event is handled by several independent, queued listeners. This is the cornerstone of the system's scalability and responsiveness.
+**Decoupled Asynchronous Processing**: The OrderPlaced event is handled by several independent, queued listeners. This is the cornerstone of the system's scalability and responsiveness.
 
-*Listeners*: Each listener has a single responsibility (e.g., UpdateVendorBalance, CreateAuditTrailEntry, ProcessVendorPayouts).
+**Listeners**: Each listener has a single responsibility (e.g. UpdateSellerBalanceListener, AuditTrailListener).
 
-*Queues*: These listeners do not execute heavy logic directly. Instead, they enqueue asynchronous jobs onto a queueing system (like Redis or SQS). This ensures the initial order placement API call returns quickly to the user without waiting for secondary processes to complete.
+**Queues**: These listeners do not execute heavy logic directly. Instead, they enqueue asynchronous jobs onto a queueing system. This ensures the initial order placement API call returns quickly to the user without waiting for secondary processes to complete.
 
-*Jobs*: Dedicated worker processes consume jobs from the queue to handle tasks like sending notifications (email/SMS) to customers and vendors, updating vendor sales statistics, and initiating inventory adjustments.
 
-*The data flow is as follows*: HTTP Request ➔ Controller ➔ DB Transaction (Create Order & Items) ➔ Commit ➔ Dispatch OrderPlaced Event ➔ Listeners Triggered ➔ Jobs Pushed to Queue ➔ Workers Process Jobs
+**The data flow is as follows**: *HTTP Request ➔ Controller ➔ DB Transaction (Create Order & Items) ➔ Commit ➔ Dispatch OrderPlaced Event ➔ Listeners Triggered ➔ Jobs Pushed to Queue ➔ Workers Process Jobs*
 
 Key Benefits
 This architecture provides several key advantages:
