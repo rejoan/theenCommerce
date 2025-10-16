@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Order;
+use Illuminate\Support\Str;
 
 class OrderObserver
 {
@@ -12,6 +13,11 @@ class OrderObserver
     public function created(Order $order): void
     {
         //
+    }
+
+    public function creating(Order $order): void
+    {
+        $order->order_number = 'ORD-' . now()->timestamp . '-' . Str::upper(Str::random(6));
     }
 
     /**

@@ -21,6 +21,16 @@ class OrderPolicy
      */
     public function view(User $user, Order $order): bool
     {
+        // A user can view an order if they are the buyer.
+        if ($user->id === $order->user_id) {
+            return true;
+        }
+
+        // A user can also view an order if they are a seller of at least one item in that order.
+        if ($user->role === 'seller') {
+            return $order->items()->where('seller_id', $user->id)->exists();
+        }
+
         return false;
     }
 

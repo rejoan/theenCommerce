@@ -2,8 +2,9 @@
 
 namespace App\Listeners;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Events\OrderPlaced;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class AuditTrailListener
 {
@@ -18,8 +19,25 @@ class AuditTrailListener
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(OrderPlaced $event): void
     {
-        //
+        $logEntry = json_encode([
+            'timestamp' => now()->toDateTimeString(),
+            'event' => 'OrderPlaced',
+            'order_id' => $event->order->id,
+            'order_number' => $event->order->order_number,
+            'buyer_id' => $event->order->user_id,
+            'total_amount' => $event->order->total_amount,
+            'items' => $event->order->items->map(function ($item) {
+                return [
+                    'product_id' => $item->product_id,
+                    'quantity' => $item->quantity,
+                    'price' => $item->price,
+                ];
+            }),
+        ], JSON_PRETTY_PRINT);
+        
+        // Append to storage/logs/orders.log
+        File::append(storage_path('logs/orders.log'), $logEntry . PHP_EOL);
     }
 }

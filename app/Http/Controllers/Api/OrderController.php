@@ -3,10 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\OrderService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
+    protected OrderService $orderService;
+
+    public function __construct(OrderService $orderService)
+    {
+        $this->orderService = $orderService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -18,10 +28,34 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        //
+        try {
+            $validatedData = $request->validate([
+                'buyer_id' => 'required|exists:users,id',
+                'items' => 'required|array|min:1',
+                'items.*.product_id' => 'required|exists:products,id',
+                'items.*.quantity' => 'required|integer|min:1',
+            ]);
+
+            $order = $this->orderService->createOrder($validatedData);
+
+            return response()->json([
+                'message' => 'Order placed successfully.',
+                'order_id' => $order->id,
+                'order_number' => $order->order_number,
+            ], 201);
+
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json(['message' => $e->getMessage()], 400);
+        } catch (\Throwable $e) {
+            Log::error('Order creation failed: ' . $e->getMessage());
+            return response()->json(['message' => 'An unexpected error occurred. Please try again.'], 500);
+        }
     }
+
 
     /**
      * Display the specified resource.
