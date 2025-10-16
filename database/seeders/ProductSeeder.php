@@ -9,6 +9,8 @@ use Illuminate\Database\Seeder;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ProductSeeder extends Seeder
 {
@@ -18,11 +20,21 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         $seller = User::where('role', 'seller')->firstOrFail();
-        Product::factory(5)->create([
-            'name' => Str::random(10),
-            'prices' => rand(100, 300),
-            'stock_quantity' => rand(1, 30),
+        DB::table('products')->insert([
+            [
+            'name' => fake()->words(3, true),
+            'price' => rand(100, 300),
+            'stock_quantity' => rand(10, 30),
             'user_id' => $seller->id,
+            'created_at' => Carbon::now()
+            ],
+            [
+            'name' => fake()->words(3, true),
+            'price' => rand(100, 300),
+            'stock_quantity' => rand(10, 30),
+            'user_id' => $seller->id,
+            'created_at' => Carbon::now()
+            ]
         ]);
     }
 }

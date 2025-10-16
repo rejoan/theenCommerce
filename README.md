@@ -26,11 +26,34 @@ composer install
 - Rename `.env.example` as `.env` 
 
 ```
+php artisan key:generate
 php artisan migrate
-composer require laravel/sanctum
-php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+composer require nesbot/carbon
 php artisan install:api
+php artisan migrate:fresh --seed
+php artisan serve
 ```
+
+Then send POST request to
+```
+http://127.0.0.1:8000/api/auth/login
+params
+email:buyer_rejoan@example.com
+password:123456
+```
+
+### response data
+```
+{
+  "message": "Login sucessfully",
+  "error": false,
+  "data": {
+    "user_email": "buyer_rejoan@example.com",
+    "token": "token"
+  }
+}
+```
+Now using above returned token you may use in endpoints as bearer token
 
 
 ## Authors

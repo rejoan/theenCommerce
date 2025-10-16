@@ -53,8 +53,7 @@ class OrderController extends Controller
         } catch (\InvalidArgumentException $e) {
             return response()->json(['message' => $e->getMessage()], 400);
         } catch (\Throwable $e) {
-            Log::error('Order creation failed: ' . $e->getMessage());
-            return response()->json(['message' => 'An unexpected error occurred. Please try again.'], 500);
+            return response()->json(['message' => $e->getMessage().'>>'.$e->getFile().'>>'.$e->getLine()], 500);
         }
     }
 

@@ -8,6 +8,9 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Product;
+use Illuminate\Support\Facades\Schema;
 
 class UserSeeder extends Seeder
 {
@@ -16,17 +19,23 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-
+        Schema::disableForeignKeyConstraints();
+        User::truncate();
+        Product::truncate();
+        Schema::enableForeignKeyConstraints();
+        
         User::factory(1)->create([
-            'name' => 'Rejoanul Buyer',
-            'email' => 'buyer_rejoan@example.com',
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
             'role' => 'buyer',
+            'balance' => '1000.0',
             'password' => Hash::make('123456'),
         ]);
         User::factory(1)->create([
-            'name' => 'Rejoanul Seller',
-            'email' => 'seller_rejoan@example.com',
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
             'role' => 'seller',
+            'balance' => '1000.0',
             'password' => Hash::make('123456'),
         ]);
     }
