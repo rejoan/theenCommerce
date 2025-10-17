@@ -36,8 +36,9 @@ Then send POST request to
 ```
 base_url/api/auth/login
 params
-email:buyer_rejoan@example.com
+email:take_mail_from_db
 password:123456
+role:seller_or_buyer
 ```
 
 ### response data
@@ -77,6 +78,11 @@ Use following format data and send through postman to `base_url/api/orders` [don
 Queue worker needs to be started as 
 ```
 php artisan queue:work
+```
+
+If queue Job not work or failed then restart required as 
+```
+php artisan queue:restart
 ```
 
 ## Authors

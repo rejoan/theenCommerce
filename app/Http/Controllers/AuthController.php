@@ -23,6 +23,7 @@ class AuthController extends Controller {
               [
                   'email' => 'required',
                   'password' => 'required',
+                  'role' => 'required',
               ]
       );
       if ($validator->fails()) {
@@ -31,7 +32,7 @@ class AuthController extends Controller {
             'error' => true
         ], 422);
       }
-      $user = User::where(['email' => $inputs['email'],'role' => 'buyer'])->first();
+      $user = User::where(['email' => $inputs['email'],'role' => $inputs['role']])->first();
       if (empty($user)) {
        return response()->json([
             'message' => 'User does not match with our record.',

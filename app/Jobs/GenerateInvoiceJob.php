@@ -1,9 +1,10 @@
 <?php
 /**
- * Developer: Rejoanul Alam | Reviewed: 2025‑10‑16
+ * Developer: Rejoanul Alam | Reviewed: 2025‑10‑17
  */
 namespace App\Jobs;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Developer: Rejoanul Alam | Reviewed: 2025‑10‑16
+ * Developer: Rejoanul Alam | Reviewed: 2025‑10‑17
  */
 namespace App\Services;
 
@@ -17,6 +17,9 @@ class OrderService
     protected ProductRepository $productRepository;
     protected OrderRepository $orderRepository;
 
+    /**
+     * prepare order and pro repo
+     */
     public function __construct(ProductRepository $productRepository, OrderRepository $orderRepository)
     {
         $this->productRepository = $productRepository;

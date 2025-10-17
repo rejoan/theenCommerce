@@ -1,6 +1,6 @@
 <?php
 /**
- * Developer: Rejoanul Alam | Reviewed: 2025‑10‑16
+ * Developer: Rejoanul Alam | Reviewed: 2025‑10‑17
  */
 namespace App\Providers;
 
