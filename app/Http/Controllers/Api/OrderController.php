@@ -11,10 +11,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Models\Order;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class OrderController extends Controller
 {
     protected OrderService $orderService;
+    use AuthorizesRequests;
 
     public function __construct(OrderService $orderService)
     {
@@ -62,9 +64,10 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Order $order)
     {
-        //
+        $this->authorize('view', $order);
+        return $order->load('items');
     }
 
     /**

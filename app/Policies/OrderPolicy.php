@@ -6,7 +6,7 @@ namespace App\Policies;
 
 use App\Models\Order;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Illuminate\Validation\ValidationException;
 
 class OrderPolicy
 {
@@ -24,8 +24,10 @@ class OrderPolicy
     public function view(User $user, Order $order): bool
     {
         // A user can view an order if they are the buyer.
-        if ($user->id === $order->user_id) {
-            return true;
+        if ($user->id != $order->user_id) {
+            throw ValidationException::withMessages([
+                'message' => 'You are unauthorize to view this.',
+            ]);
         }
 
         // A user can also view an order if they are a seller of at least one item in that order.

@@ -16,10 +16,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Order Placement Endpoint
     Route::post('/orders', [OrderController::class, 'store']);
-    
-    // Example of a protected route using the policy
-     Route::get('/orders/{order}', function (App\Models\Order $order) {
-         $this->authorize('view', $order);
-         return $order->load('items');
-     });
+    Route::get('/orders/{order}', [OrderController::class, 'show']);
 });
