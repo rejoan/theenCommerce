@@ -6,7 +6,6 @@ namespace App\Listeners;
 
 use App\Events\OrderPlaced;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 class AuditTrailListener
 {

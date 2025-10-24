@@ -1,10 +1,9 @@
 <?php
 /**
- * Developer: Rejoanul Alam | Reviewed: 2025‑10‑17
+ * Developer: Rejoanul Alam | Reviewed: 2025‑10‑24
  */
 namespace App\Console\Commands;
 
-use Illuminate\Support\Facades\Log;
 use App\Jobs\GenerateInvoiceJob;
 use App\Models\Order;
 use Illuminate\Console\Command;

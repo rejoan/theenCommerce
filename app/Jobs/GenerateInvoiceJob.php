@@ -1,10 +1,9 @@
 <?php
 /**
- * Developer: Rejoanul Alam | Reviewed: 2025‑10‑17
+ * Developer: Rejoanul Alam | Reviewed: 2025‑10‑24
  */
 namespace App\Jobs;
 
-use Illuminate\Support\Facades\Log;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class GenerateInvoiceJob implements ShouldQueue
 {
@@ -33,6 +33,7 @@ class GenerateInvoiceJob implements ShouldQueue
      */
     public function handle(): void
     {
+      try {
         // Prevent race conditions by refreshing the model and checking status
         $this->order->refresh();
 
@@ -55,5 +56,8 @@ class GenerateInvoiceJob implements ShouldQueue
 
         // Mark the order as invoiced
         $this->order->update(['invoice_generated_at' => now()]);
+        } catch (\Exception $e) {
+            Log::error('>>>>'.$e->getMessage());
+        }
     }
 }

@@ -27,11 +27,10 @@ git clone git@github.com:rejoan/theenCommerce.git && cd theenCommerce
 composer install
 ```
 
-- Rename `.env.example` as `.env` 
+- Rename `.env.example` as `.env` and make a DB name `theencommerce`
 
 ```
 php artisan key:generate
-php artisan install:api
 php artisan migrate:fresh --seed
 php artisan serve
 ```
@@ -108,4 +107,9 @@ php artisan queue:work
 If queue Job not work or failed then restart required as 
 ```
 php artisan queue:restart
+```
+
+Run following custom artisan command (cronjob possible) for generate invoice (Remember payment status in DB `orders` table should `paid`)
+```
+php artisan orders:process‐invoices
 ```
